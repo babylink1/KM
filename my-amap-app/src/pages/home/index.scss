@@ -1,0 +1,29 @@
+.home {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  .title {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 50px;
+    color: #f6ffe8;
+    z-index: 1;
+
+    &::after,
+    &::before {
+      content: attr(data-titletxt);
+      width: 100%;
+      position: absolute;
+      left: 0;
+      z-index: -1;
+    }
+    &::after {
+      -webkit-text-stroke: 6px #b23018;
+    }
+    &::before {
+      -webkit-text-stroke: 10px #deb482;
+    }
+  }
+}

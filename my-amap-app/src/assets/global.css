@@ -1,8 +1,17 @@
-* {
-  padding: 0;
-  margin: 0;
+@font-face {
+  font-family: KM-CN;
+  src: url("./font/FOTC-ARTeyuanGBHeavy.otf") format("truetype");
 }
-html,
-body {
-  height: 100%;
+
+@layer base {
+  * {
+    padding: 0;
+    margin: 0;
+    font-family: KM-CN;
+    font-size: 16px;
+  }
+  html,
+  body {
+    height: 100%;
+  }
 }
