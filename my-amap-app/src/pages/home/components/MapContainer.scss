@@ -7,4 +7,10 @@
   .amap-copyright {
     display: none !important;
   }
+  .marker-infowindow {
+    padding: 5px 10px;
+    background: #fff;
+    box-shadow: 0 0 5px #000;
+    border-radius: 2px;
+  }
 }

@@ -1,8 +1,9 @@
 import "./MapContainer.scss";
 
 import AMapLoader from "@amap/amap-jsapi-loader";
-import { click } from "@testing-library/user-event/dist/click";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+
+import MarkerDetailModal from "./DetailDialog";
 
 // 林场分布定位点
 const posPoints = [
@@ -22,6 +23,7 @@ const posPoints = [
 
 export default function MapContainer() {
   let map = null;
+  const modalRef = useRef(null);
 
   // 地图点击
   const mapOnClick = (e, infoWindow) => {
@@ -43,7 +45,7 @@ export default function MapContainer() {
         map = new AMap.Map("amap-container", {
           zoom: 5.5, // 初始化地图级别
           center: [104.114129, 37.550339], // 初始化地图中心点位置
-          mapStyle: "amap://styles/fresh",
+          mapStyle: "amap://styles/blue",
         });
 
         /* 使用地图插件 */
@@ -56,22 +58,24 @@ export default function MapContainer() {
         const markers = posPoints.map((item, index) => {
           return new AMap.Marker({
             position: new AMap.LngLat(item.lnglat[0], item.lnglat[1]), // Marker的位置
-            // click: (e) => markerOnClick(e),
-            // onClick: (e) => markerOnClick(e),
+            label: {
+              content: `<div>${item.name}</div>`,
+              direction: "top",
+              offset: [0, -5],
+            },
+            extData: {
+              ...item,
+            },
           });
         });
         map.add(markers);
-        markers.forEach((mItem) =>
+
+        markers.forEach((mItem, mIndex) => {
           // marker 点击
           mItem.on("click", (e) => {
-            infoWindow.open(map, [e.lnglat.lng, e.lnglat.lat]);
-          })
-        );
-
-        /* 创建信息窗体 */
-        const infoWindow = new AMap.InfoWindow({
-          content: "<div>这里是信息窗体内容</div>", // 信息窗体的内容
-          offset: new AMap.Pixel(0, -20), // 偏移量
+            // console.log("modalRef.current", modalRef.current);
+            modalRef.current.showModal();
+          });
         });
 
         // map 注册事件
@@ -84,7 +88,12 @@ export default function MapContainer() {
     return () => {
       map?.destroy();
     };
-  }, []);
+  }, [modalRef.current]);
 
-  return <div id="amap-container"></div>;
+  return (
+    <>
+      <div id="amap-container"></div>
+      <MarkerDetailModal ref={modalRef} />
+    </>
+  );
 }
